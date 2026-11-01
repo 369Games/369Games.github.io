@@ -97,7 +97,7 @@ img.isolated-icon{background-image:none!important;clip-path:none!important;objec
 @media(max-width:600px){#view[data-view=legacy] .legacy-heading h2>.legacy-tree-art{width:44px;height:44px}.legacy-heading{gap:8px}.retirebox .bigstar>.legacy-crown-art{width:64px;height:64px}.legacy-gain-value{font-size:36px}.starchip .legacy-crown-art{width:24px;height:24px}}
 @media(max-width:600px){#hDate .season-art{width:23px;height:23px}.season-picker .season-art{width:22px;height:22px}.season-picker button{gap:3px;padding-inline:4px}}
 /* Growing crops read clearly smaller and paler; ready crops glow gold. */
-.plot .pe img.stage-leaf{transform:scale(.6)!important;transform-origin:center bottom;filter:saturate(.6) brightness(.9);opacity:.95}
+.plot .pe img.stage-leaf{transform:scale(.85)!important;transform-origin:center bottom;filter:saturate(.8) brightness(.95)}
 .plot.ready .pe img{filter:drop-shadow(0 0 6px #ffd76a99)}
 .plot.empty .pe .ui-icon{opacity:.45}
 /* Animal grades and golden products (tint until dedicated golden art exists). */
@@ -132,3 +132,14 @@ img.golden-art{filter:sepia(1) saturate(2.8) hue-rotate(-12deg) brightness(1.08)
 .npc-story{display:flex;align-items:center;gap:14px;margin-bottom:10px}
 .npc-story h2{margin:0}
 .npc-story-text{line-height:1.8}
+/* New-player guide */
+.tut-box{position:fixed;z-index:60;bottom:18px;inset-inline-end:18px;width:min(360px,calc(100vw - 32px));background:linear-gradient(180deg,var(--paper2),var(--paper));border:2px solid var(--gold);border-radius:12px;padding:12px 14px;box-shadow:0 10px 30px #0008;color:var(--ink);animation:tut-in .35s ease-out}
+.tut-box p{margin:6px 0 10px;line-height:1.7;font-size:14.5px}
+.tut-box .row{margin:0}
+.tut-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tut-count{color:var(--muted);font-weight:700;direction:ltr}
+.tut-ring{position:fixed;z-index:55;pointer-events:none;border:3px solid var(--gold);border-radius:12px;box-shadow:0 0 0 4px #e2bc6c33,0 0 18px #e2bc6caa;animation:tut-pulse 1.2s ease-in-out infinite}
+@keyframes tut-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(1.03)}}
+@keyframes tut-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (max-width:600px){.tut-box{inset-inline:12px;bottom:12px;width:auto}}
+@media (prefers-reduced-motion:reduce){.tut-ring,.tut-box{animation:none}}
