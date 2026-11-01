@@ -143,3 +143,11 @@ img.golden-art{filter:sepia(1) saturate(2.8) hue-rotate(-12deg) brightness(1.08)
 @keyframes tut-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media (max-width:600px){.tut-box{inset-inline:12px;bottom:12px;width:auto}}
 @media (prefers-reduced-motion:reduce){.tut-ring,.tut-box{animation:none}}
+/* Feedback: the top-bar chip sits next to the language button (no auto margin), and the in-game form */
+button.chip.fb-chip,[dir=ltr] button.chip.fb-chip{margin-left:0;margin-right:0}
+.fb-types{margin:4px 0 10px}
+.fb-rates{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 12px;direction:ltr}
+.fb-rate{width:30px;height:30px;padding:0;border-radius:8px;border:1px solid var(--line);background:var(--soft);color:var(--muted);font-weight:800;font-size:13px;cursor:pointer}
+.fb-rate.on{background:linear-gradient(180deg,var(--gold),#c9973f);border-color:var(--gold);color:#2a1d0e}
+.fb-text{width:100%;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--soft);color:var(--ink);font:inherit;font-size:15px;resize:vertical}
+.fb-err{color:var(--warn);min-height:1em;margin:6px 0}

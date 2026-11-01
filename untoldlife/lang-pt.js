@@ -748,5 +748,21 @@
 "📖 دليل اللاعب": "📖 Guia do jogador",
 "↺ أعد تشغيل الدليل": "↺ Reiniciar o guia",
 "يلا نلعب! 🚀": "Bora jogar! 🚀",
-"تخطّي الدليل": "Pular o guia"
+"تخطّي الدليل": "Pular o guia",
+"اقتراح": "اقتراح",
+"💡 اقتراح": "💡 Ideia",
+"خطأ": "خطأ",
+"🐞 خطأ": "🐞 Bug",
+"رأي": "رأي",
+"💬 رأي": "💬 Opinião",
+"ملاحظتك تروح لفريق 369Games مباشرة. لا تكتب معلومات شخصية.": "Seu feedback vai direto para a equipe da 369Games. Não inclua informações pessoais.",
+"وش نوع ملاحظتك؟": "Que tipo de feedback é?",
+"كم تقيّم اللعبة؟": "Que nota você dá para o jogo?",
+"اكتب ملاحظتك هنا...": "Escreva seu feedback aqui...",
+"📨 أرسل": "📨 Enviar",
+"إلغاء": "Cancelar",
+"اكتب ملاحظة أو اختر تقييم أول.": "Escreva algo ou escolha uma nota primeiro.",
+"انتظر شوي قبل ما ترسل مرة ثانية.": "Espere um pouco antes de enviar de novo.",
+"✅ وصلت ملاحظتك، شكراً!": "✅ Recebido, obrigado!",
+"❌ ما قدرنا نرسل. تأكد من الإنترنت وجرب مرة ثانية.": "❌ Não conseguimos enviar. Verifique sua internet e tente de novo."
 };

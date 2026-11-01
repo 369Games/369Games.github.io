@@ -1657,14 +1657,13 @@ function applyTheme() {
 function siteConfig() { return window.SITE_CONFIG || {}; }
 function sitePanel() {
   const C = siteConfig();
-  if (!C.feedback && !C.home) return '';
-  const fb = C.feedback ? `<a class="btn gold" href="${C.feedback}" target="_blank" rel="noopener">${L('✍️ أرسل ملاحظاتك')}</a>` : '';
+  const fb = `<button class="btn gold" data-a="feedback">${L('✍️ أرسل ملاحظاتك')}</button>`; // in-game form, feedback.js
   const home = C.home ? `<a class="btn ghost" href="${C.home}">${L('🏠 كل ألعابنا')}</a>` : '';
   return `<h3>${L('💬 ملاحظاتك')}</h3><p class="hint">${L('هذي نسخة تجريبية. أي شيء عجبك أو ضايقك أو خرب، قل لنا.')}</p><div class="row">${fb}${home}</div>`;
 }
 function initSiteLinks() {
-  const fb = $('fbBtn'), C = siteConfig();
-  if (fb && C.feedback) { fb.href = C.feedback; fb.textContent = L('💬 ملاحظاتك'); fb.classList.remove('hidden'); }
+  const fb = $('fbBtn');
+  if (fb) { fb.textContent = L('💬 ملاحظاتك'); fb.classList.remove('hidden'); }
 }
 initSiteLinks();
 // Language names always show in their own language (see LANGS in i18n.js).
