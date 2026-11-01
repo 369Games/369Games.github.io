@@ -151,3 +151,7 @@ button.chip.fb-chip,[dir=ltr] button.chip.fb-chip{margin-left:0;margin-right:0}
 .fb-rate.on{background:linear-gradient(180deg,var(--gold),#c9973f);border-color:var(--gold);color:#2a1d0e}
 .fb-text{width:100%;padding:10px 12px;border-radius:10px;border:2px solid var(--line);background:var(--soft);color:var(--ink);font:inherit;font-size:15px;resize:vertical}
 .fb-err{color:var(--warn);min-height:1em;margin:6px 0}
+/* Sound: mute chip in the top bar and the volume sliders */
+button.chip.au-chip,[dir=ltr] button.chip.au-chip{margin-left:0;margin-right:0;min-width:34px;justify-content:center}
+.au-row{align-items:center;gap:12px}
+.au-row input[type=range]{flex:1;max-width:220px;accent-color:var(--gold)}

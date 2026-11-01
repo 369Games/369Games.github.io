@@ -1410,7 +1410,7 @@ function viewSettings() {
     <h3>💾 الحفظ</h3><div class="row">
     <button class="btn" data-a="save">💾 حفظ الآن</button><button class="btn blue" data-a="export">📤 تصدير</button>
     <button class="btn ghost" data-a="import">📥 استيراد</button><button class="btn red" data-a="reset">🗑️ بدء من جديد</button></div>
-    <h3>🧑 شخصيتك</h3>${S.spouse ? L`<p class="hint">${S.gender ? GENDER[S.gender].e + ' ' + GENDER[S.gender].n : ''} — متزوج${gv('', L('ة'))} من ${NPC_BY[S.spouse].n} 💍</p>` : L`${genderPick('setGender', S.gender)}<p class="hint">يحدد من تقدر تتزوج من أهل القرية. ولدك أو بنتك في الجيل القادم تختاره عند التقاعد.</p>`}${langPick()}${sitePanel()}${typeof tutPanel === 'function' ? tutPanel() : ''}</div></div>`;
+    <h3>🧑 شخصيتك</h3>${S.spouse ? L`<p class="hint">${S.gender ? GENDER[S.gender].e + ' ' + GENDER[S.gender].n : ''} — متزوج${gv('', L('ة'))} من ${NPC_BY[S.spouse].n} 💍</p>` : L`${genderPick('setGender', S.gender)}<p class="hint">يحدد من تقدر تتزوج من أهل القرية. ولدك أو بنتك في الجيل القادم تختاره عند التقاعد.</p>`}${langPick()}${sitePanel()}${typeof tutPanel === 'function' ? tutPanel() : ''}${typeof audioPanel === 'function' ? audioPanel() : ''}</div></div>`;
 }
 function updSettings() {
   const b = $('statsBox'); if (!b) return;
