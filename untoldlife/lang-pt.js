@@ -808,5 +808,9 @@
 "🔔 المؤثرات": "🔔 Efeitos",
 "🔊 شغّل الصوت": "🔊 Ligar o som",
 "🔇 كتم الصوت": "🔇 Silenciar",
-"<h3>📈 إحصائيات مجهولة</h3><p class=\"hint\">تساعدنا نعرف وين اللعبة حلوة ووين صعبة. ما نرسل اسمك ولا حفظك، بس أرقام مثل الجيل ووقت اللعب.</p>\n  <div class=\"row\"><button class=\"btn ghost sm\" data-a=\"statsToggle\">{0} شارك إحصائيات مجهولة</button></div>": "<h3>📈 Estatísticas anônimas</h3><p class=\"hint\">Ajudam a ver onde o jogo é divertido e onde é difícil. Nunca enviamos seu nome nem seu jogo, só números como sua geração e tempo de jogo.</p>\n  <div class=\"row\"><button class=\"btn ghost sm\" data-a=\"statsToggle\">{0} Compartilhar estatísticas anônimas</button></div>"
+"<h3>📈 إحصائيات مجهولة</h3><p class=\"hint\">تساعدنا نعرف وين اللعبة حلوة ووين صعبة. ما نرسل اسمك ولا حفظك، بس أرقام مثل الجيل ووقت اللعب.</p>\n  <div class=\"row\"><button class=\"btn ghost sm\" data-a=\"statsToggle\">{0} شارك إحصائيات مجهولة</button></div>": "<h3>📈 Estatísticas anônimas</h3><p class=\"hint\">Ajudam a ver onde o jogo é divertido e onde é difícil. Nunca enviamos seu nome nem seu jogo, só números como sua geração e tempo de jogo.</p>\n  <div class=\"row\"><button class=\"btn ghost sm\" data-a=\"statsToggle\">{0} Compartilhar estatísticas anônimas</button></div>",
+"🚚 انتقلنا لعنوان جديد: <b>{0}</b>": "🚚 Mudamos para um novo endereço: <b>{0}</b>",
+"انقل حفظي والعب هناك": "Levar meu jogo e jogar lá",
+"عندك حفظ هنا ({0}، الجيل {1}). تبي تستبدله بحفظك من الموقع القديم ({2}، الجيل {3})؟": "Você já tem um jogo aqui ({0}, geração {1}). Substituir pelo seu jogo do site antigo ({2}, geração {3})?",
+"تبي تكمل حفظك من الموقع القديم ({0}، الجيل {1})؟": "Continuar seu jogo do site antigo ({0}, geração {1})?"
 };

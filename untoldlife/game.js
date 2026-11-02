@@ -1856,7 +1856,8 @@ function saveLoadGo() {
   pendingSave = null; S.last = Date.now(); save(); logs = []; logDirty = true; lastSig = '';
   closeModal(); log(L`⬆️ رجعت لحفظ ${esc(S.name)} — الجيل ${S.leg.gen}`, 'season'); toast(L('✅ تم تحميل الحفظ'));
 }
-function save() { if (!S || !S.started) return; try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { /* التخزين غير متاح */ } }
+let saveBlocked = false; // set while another save is being written in (move.js)
+function save() { if (saveBlocked || !S || !S.started) return; try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { /* التخزين غير متاح */ } }
 function migrate(o) {
   const st = deepMerge(newState(), o);
   if (!o.gen) { st.gen.earned = (o.stats && o.stats.earned) || 0; st.gen.days = Math.max(0, dayAbsOf(st) - 1); }

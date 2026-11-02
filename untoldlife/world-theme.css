@@ -184,3 +184,7 @@ button.chip.au-chip,[dir=ltr] button.chip.au-chip{margin-left:0;margin-right:0;m
 @keyframes golden-sheen{0%{transform:translateX(-120%)}60%,100%{transform:translateX(120%)}}
 .start-note{color:var(--muted)}
 .start-note.now{color:var(--good)!important;font-weight:700}
+/* Old web address: "we moved" banner with the save transfer button */
+.move-bar{position:sticky;top:0;z-index:60;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 16px;padding:10px 16px;
+  background:linear-gradient(90deg,#3b2a12,#6b4a1c,#3b2a12);color:#fff3c4;font-weight:600;border-bottom:2px solid var(--gold);text-align:center}
+.move-bar .btn{margin:0}

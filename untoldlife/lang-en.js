@@ -808,5 +808,9 @@
 "🔔 المؤثرات": "🔔 Effects",
 "🔊 شغّل الصوت": "🔊 Turn sound on",
 "🔇 كتم الصوت": "🔇 Mute sound",
-"<h3>📈 إحصائيات مجهولة</h3><p class=\"hint\">تساعدنا نعرف وين اللعبة حلوة ووين صعبة. ما نرسل اسمك ولا حفظك، بس أرقام مثل الجيل ووقت اللعب.</p>\n  <div class=\"row\"><button class=\"btn ghost sm\" data-a=\"statsToggle\">{0} شارك إحصائيات مجهولة</button></div>": "<h3>📈 Anonymous stats</h3><p class=\"hint\">Helps us see where the game is fun and where it's hard. We never send your name or your save, only numbers like your generation and play time.</p>\n  <div class=\"row\"><button class=\"btn ghost sm\" data-a=\"statsToggle\">{0} Share anonymous stats</button></div>"
+"<h3>📈 إحصائيات مجهولة</h3><p class=\"hint\">تساعدنا نعرف وين اللعبة حلوة ووين صعبة. ما نرسل اسمك ولا حفظك، بس أرقام مثل الجيل ووقت اللعب.</p>\n  <div class=\"row\"><button class=\"btn ghost sm\" data-a=\"statsToggle\">{0} شارك إحصائيات مجهولة</button></div>": "<h3>📈 Anonymous stats</h3><p class=\"hint\">Helps us see where the game is fun and where it's hard. We never send your name or your save, only numbers like your generation and play time.</p>\n  <div class=\"row\"><button class=\"btn ghost sm\" data-a=\"statsToggle\">{0} Share anonymous stats</button></div>",
+"🚚 انتقلنا لعنوان جديد: <b>{0}</b>": "🚚 We moved to a new address: <b>{0}</b>",
+"انقل حفظي والعب هناك": "Move my save and play there",
+"عندك حفظ هنا ({0}، الجيل {1}). تبي تستبدله بحفظك من الموقع القديم ({2}، الجيل {3})؟": "You already have a save here ({0}, generation {1}). Replace it with your save from the old site ({2}, generation {3})?",
+"تبي تكمل حفظك من الموقع القديم ({0}، الجيل {1})؟": "Continue your save from the old site ({0}, generation {1})?"
 };
