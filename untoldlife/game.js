@@ -871,6 +871,7 @@ function doRetire() {
   log(L`🌱 بدأ الجيل ${LG.gen}: ${S.name} ${gv(L('يستلم'), L('تستلم'))} مزرعة العائلة`, 'season');
   if (S.gen.ch) { const c = CHALLENGES.find(x => x.id === S.gen.ch); log(L`🏆 تحدي هذا الجيل: ${c.e} ${c.n} — ${goalText(c)}`, 'season'); }
   save(); RS = null;
+  log(L('💾 جيل جديد! وقت مناسب تنزّل نسخة من حفظك من «المزيد»'), 'new');
   showLetter(old, gain, heir);
 }
 function showLetter(o, gain, heir) {
@@ -1055,6 +1056,9 @@ const A = {
     try { S = migrate(JSON.parse(decodeURIComponent(escape(atob(code.trim()))))); S.last = Date.now(); save(); lastSig = ''; toast(L('✅ تم الاستيراد')); }
     catch (e) { toast(L('❌ الكود غير صالح')); }
   },
+  saveDownload: () => saveDownload(),
+  saveUpload: () => saveUpload(),
+  saveLoadGo: () => saveLoadGo(),
   reset: () => {
     if (!confirm(L('متأكد؟ سيتم حذف كل تقدمك نهائياً!'))) return;
     localStorage.removeItem(SAVE_KEY); S = newState(); logs = []; logDirty = true; lastSig = ''; showIntro();
@@ -1486,11 +1490,16 @@ function viewSettings() {
   </ul></div>
   <div class="panel"><h2>📊 الإحصائيات</h2><div id="statsBox"></div>
     <h3>💾 الحفظ</h3><div class="row">
-    <button class="btn" data-a="save">💾 حفظ الآن</button><button class="btn blue" data-a="export">📤 تصدير</button>
-    <button class="btn ghost" data-a="import">📥 استيراد</button><button class="btn red" data-a="reset">🗑️ بدء من جديد</button></div>
-    <h3>🧑 شخصيتك</h3>${S.spouse ? L`<p class="hint">${S.gender ? GENDER[S.gender].e + ' ' + GENDER[S.gender].n : ''} — متزوج${gv('', L('ة'))} من ${NPC_BY[S.spouse].n} 💍</p>` : L`${genderPick('setGender', S.gender)}<p class="hint">يحدد من تقدر تتزوج من أهل القرية. ولدك أو بنتك في الجيل القادم تختاره عند التقاعد.</p>`}${langPick()}${sitePanel()}${typeof tutPanel === 'function' ? tutPanel() : ''}${typeof audioPanel === 'function' ? audioPanel() : ''}</div></div>`;
+    <button class="btn" data-a="save">💾 حفظ الآن</button><button class="btn gold" data-a="saveDownload">⬇️ نزّل ملف الحفظ</button>
+    <button class="btn blue" data-a="saveUpload">⬆️ ارفع ملف حفظ</button></div>
+    <p class="hint" id="backupAge"></p>
+    <div class="row"><button class="btn ghost sm" data-a="export">📤 تصدير كود</button>
+    <button class="btn ghost sm" data-a="import">📥 استيراد كود</button><button class="btn red sm" data-a="reset">🗑️ بدء من جديد</button></div>
+    <h3>🧑 شخصيتك</h3>${S.spouse ? L`<p class="hint">${S.gender ? GENDER[S.gender].e + ' ' + GENDER[S.gender].n : ''} — متزوج${gv('', L('ة'))} من ${NPC_BY[S.spouse].n} 💍</p>` : L`${genderPick('setGender', S.gender)}<p class="hint">يحدد من تقدر تتزوج من أهل القرية. ولدك أو بنتك في الجيل القادم تختاره عند التقاعد.</p>`}${langPick()}${sitePanel()}${typeof tutPanel === 'function' ? tutPanel() : ''}${typeof audioPanel === 'function' ? audioPanel() : ''}${typeof statsPanel === 'function' ? statsPanel() : ''}</div></div>`;
 }
 function updSettings() {
+  const ba = $('backupAge');
+  if (ba) { const t = backupAt(), txt = t ? L`💡 ملف الحفظ يحمي تقدمك لو انمسحت بيانات المتصفح أو غيّرت جهازك. آخر نسخة نزّلتها: قبل ${ftime((Date.now() - t) / 1000)}` : L('💡 ملف الحفظ يحمي تقدمك لو انمسحت بيانات المتصفح أو غيّرت جهازك. ما نزّلت أي نسخة للحين.'); if (ba.textContent !== txt) ba.textContent = txt; }
   const b = $('statsBox'); if (!b) return;
   const st = S.stats;
   const rows = [[L('⏳ وقت اللعب'), ftime(st.play)], [L('💰 مجموع الأرباح'), fmt(st.earned)], [L('🧺 محاصيل محصودة'), fmt(st.harvests)],
@@ -1795,6 +1804,56 @@ function deepMerge(def, obj) {
     else def[k] = v;
   }
   return def;
+}
+/* Save to a file: download a .json backup, upload one back. Old copy-paste codes are accepted too. */
+const BACKUP_KEY = 'untoldlife_backup_at';
+let pendingSave = null;
+function backupAt() { try { return +localStorage.getItem(BACKUP_KEY) || 0; } catch (e) { return 0; } }
+function saveDownload() {
+  if (!S || !S.started) return;
+  save();
+  const data = JSON.stringify({ game: 'UntoldLife', format: 1, saved: new Date().toISOString(), state: S });
+  const d = new Date(), day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const who = String(S.leg.family || S.name || 'save').replace(/[\\/:*?"<>|\s]+/g, '-').slice(0, 24);
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+  a.download = `UntoldLife-${who}-G${S.leg.gen}-${day}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  try { localStorage.setItem(BACKUP_KEY, String(Date.now())); } catch (e) { /* */ }
+  toast(L('⬇️ نزل ملف الحفظ، احتفظ فيه في مكان آمن'));
+}
+function parseSave(text) {
+  text = String(text || '').trim();
+  let o = null;
+  try { o = JSON.parse(text); } catch (e) { try { o = JSON.parse(decodeURIComponent(escape(atob(text)))); } catch (e2) { return null; } }
+  if (o && o.game === 'UntoldLife' && o.state) o = o.state;
+  return o && typeof o === 'object' && o.leg && o.farm && o.started ? o : null;
+}
+function saveUpload() {
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = '.json,.txt,application/json,text/plain';
+  inp.onchange = () => {
+    const f = inp.files && inp.files[0]; if (!f) return;
+    if (f.size > 5e6) return toast(L('❌ هذا ما هو ملف حفظ'));
+    const r = new FileReader();
+    r.onload = () => {
+      const st = parseSave(r.result);
+      if (!st) return toast(L('❌ هذا ما هو ملف حفظ'));
+      pendingSave = st;
+      openModal(L`<h2>⬆️ ارفع ملف حفظ</h2><div class="kv"><span>👤 الاسم</span><span>${esc(st.name || '')}</span></div><div class="kv"><span>🌳 الجيل</span><span>${(st.leg && st.leg.gen) || 1}</span></div><div class="kv"><span>💰 الذهب</span><span>${fmt(st.gold || 0)}</span></div>
+      <p class="hint">⚠️ هذا الحفظ بياخذ مكان تقدمك الحالي. لو تبي ترجع له، نزّل ملف حفظك الحالي أول.</p>
+      <div class="row"><button class="btn gold" data-a="saveLoadGo">✅ استبدل وكمّل من هذا الحفظ</button><button class="btn ghost" data-a="saveDownload">⬇️ نزّل حفظي الحالي أول</button><button class="btn ghost" data-a="closeModal">إلغاء</button></div>`);
+    };
+    r.readAsText(f);
+  };
+  inp.click();
+}
+function saveLoadGo() {
+  if (!pendingSave) return;
+  try { S = migrate(pendingSave); } catch (e) { pendingSave = null; return toast(L('❌ هذا ما هو ملف حفظ')); }
+  pendingSave = null; S.last = Date.now(); save(); logs = []; logDirty = true; lastSig = '';
+  closeModal(); log(L`⬆️ رجعت لحفظ ${esc(S.name)} — الجيل ${S.leg.gen}`, 'season'); toast(L('✅ تم تحميل الحفظ'));
 }
 function save() { if (!S || !S.started) return; try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { /* التخزين غير متاح */ } }
 function migrate(o) {
