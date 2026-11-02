@@ -176,28 +176,35 @@ const ORD = ['', L('الأول'), L('الثاني'), L('الثالث'), L('ال�
 const BRANCHES = { farm: L('🌾 المزارع'), ranch: L('🐄 الراعي'), mine: L('⛏️ المنقّب'), war: L('⚔️ المحارب'), trade: L('💰 التاجر'), family: L('🏡 العائلة') };
 const PERKS = [
   { id: 'f_grow', b: 'farm', n: L('تربة خصبة'), e: '🌱', max: 10, cost: 2, mult: 1.6, eff: l => L`+${25 * l}% سرعة النمو` },
-  { id: 'f_plots', b: 'farm', n: L('أرض موروثة'), e: '🟫', max: 5, cost: 3, mult: 1.8, start: 1, eff: l => L`تبدأ بـ ${4 + 2 * l} أحواض` },
-  { id: 'f_golden', b: 'farm', n: L('البذرة الذهبية'), e: '✨', max: 5, cost: 5, mult: 2, eff: l => L`${l}% فرصة محصول ذهبي يعطي ×10 سعره ذهباً` },
-  { id: 'f_xp', b: 'farm', n: L('حكمة الأرض'), e: '📗', max: 5, cost: 2, mult: 1.7, eff: l => L`+${30 * l}% خبرة الزراعة` },
-  { id: 'r_cost', b: 'ranch', n: L('تاجر المواشي'), e: '🏷️', max: 5, cost: 2, mult: 1.7, eff: l => L`-${10 * l}% سعر الحيوانات` },
-  { id: 'r_start', b: 'ranch', n: L('قطيع العائلة'), e: '🐔', max: 3, cost: 3, mult: 2, start: 1, eff: l => L`تبدأ ومعك ${2 * l} دجاجات` },
+  { id: 'f_plots', req: ['f_grow', 3], b: 'farm', n: L('أرض موروثة'), e: '🟫', max: 5, cost: 3, mult: 1.8, start: 1, eff: l => L`تبدأ بـ ${4 + 2 * l} أحواض` },
+  { id: 'f_golden', req: ['f_xp', 3], b: 'farm', n: L('البذرة الذهبية'), e: '✨', max: 5, cost: 5, mult: 2, eff: l => L`${l}% فرصة محصول ذهبي يعطي ×10 سعره ذهباً` },
+  { id: 'f_xp', req: ['f_grow', 3], b: 'farm', n: L('حكمة الأرض'), e: '📗', max: 5, cost: 2, mult: 1.7, eff: l => L`+${30 * l}% خبرة الزراعة` },
+  { id: 'r_cost', req: ['r_speed', 3], b: 'ranch', n: L('تاجر المواشي'), e: '🏷️', max: 5, cost: 2, mult: 1.7, eff: l => L`-${10 * l}% سعر الحيوانات` },
+  { id: 'r_start', req: ['r_speed', 3], b: 'ranch', n: L('قطيع العائلة'), e: '🐔', max: 3, cost: 3, mult: 2, start: 1, eff: l => L`تبدأ ومعك ${2 * l} دجاجات` },
   { id: 'r_speed', b: 'ranch', n: L('حيوانات سعيدة'), e: '💕', max: 10, cost: 2, mult: 1.6, eff: l => L`+${20 * l}% سرعة الإنتاج الحيواني` },
   { id: 'm_power', b: 'mine', n: L('سواعد قوية'), e: '💪', max: 10, cost: 2, mult: 1.6, eff: l => L`+${30 * l}% قوة الحفر والصيد` },
-  { id: 'm_miners', b: 'mine', n: L('رفاق المنجم'), e: '👷', max: 3, cost: 3, mult: 2, start: 1, eff: l => L`تبدأ ومعك ${2 * l} عمال منجم` },
-  { id: 'm_gem', b: 'mine', n: L('عين الجواهري'), e: '💎', max: 5, cost: 3, mult: 1.8, eff: l => L`+${50 * l}% فرصة الجواهر` },
+  { id: 'm_miners', req: ['m_power', 3], b: 'mine', n: L('رفاق المنجم'), e: '👷', max: 3, cost: 3, mult: 2, start: 1, eff: l => L`تبدأ ومعك ${2 * l} عمال منجم` },
+  { id: 'm_gem', req: ['m_power', 3], b: 'mine', n: L('عين الجواهري'), e: '💎', max: 5, cost: 3, mult: 1.8, eff: l => L`+${50 * l}% فرصة الجواهر` },
   { id: 'w_power', b: 'war', n: L('دم المحارب'), e: '❤️‍🔥', max: 10, cost: 2, mult: 1.6, eff: l => L`+${15 * l}% هجوم وصحة` },
-  { id: 'w_floor', b: 'war', n: L('ذاكرة المعارك'), e: '🗺️', max: 5, cost: 3, mult: 1.8, start: 1, eff: l => L`تبدأ الزنزانة من ${10 * l}% من أعلى طابق وصلته عائلتك` },
-  { id: 'w_quest', b: 'war', n: L('سمعة العائلة'), e: '📜', max: 5, cost: 2, mult: 1.7, eff: l => L`+${25 * l}% مكافآت المهمات` },
-  { id: 'w_xp', b: 'war', n: L('تدريب الأب'), e: '🥋', max: 5, cost: 2, mult: 1.7, eff: l => L`+${30 * l}% خبرة القتال` },
+  { id: 'w_floor', req: ['w_power', 3], b: 'war', n: L('ذاكرة المعارك'), e: '🗺️', max: 5, cost: 3, mult: 1.8, start: 1, eff: l => L`تبدأ الزنزانة من ${10 * l}% من أعلى طابق وصلته عائلتك` },
+  { id: 'w_quest', req: ['w_xp', 3], b: 'war', n: L('سمعة العائلة'), e: '📜', max: 5, cost: 2, mult: 1.7, eff: l => L`+${25 * l}% مكافآت المهمات` },
+  { id: 'w_xp', req: ['w_power', 3], b: 'war', n: L('تدريب الأب'), e: '🥋', max: 5, cost: 2, mult: 1.7, eff: l => L`+${30 * l}% خبرة القتال` },
   { id: 't_price', b: 'trade', n: L('مساومة'), e: '🤝', max: 10, cost: 2, mult: 1.6, eff: l => L`+${10 * l}% ذهب من كل المصادر` },
-  { id: 't_gold', b: 'trade', n: L('رأس مال'), e: '💰', max: 5, cost: 2, mult: 1.9, start: 1, eff: l => L`تبدأ بـ ${fmt(startGold(l))} ذهب` },
-  { id: 't_offline', b: 'trade', n: L('نوم هانئ'), e: '😴', max: 4, cost: 3, mult: 1.8, eff: l => L`التقدم أثناء الغياب حتى ${12 + 6 * l} ساعة` },
-  { id: 't_stars', b: 'trade', n: L('حكمة الأجيال'), e: '🌟', max: 10, cost: 4, mult: 1.7, eff: l => L`+${10 * l}% نجوم الإرث` },
-  { id: 'q_workers', b: 'family', n: L('العمال يتذكرونك'), e: '🧑‍🌾', max: 3, cost: 3, mult: 2.5, start: 1,
+  { id: 't_gold', req: ['t_price', 3], b: 'trade', n: L('رأس مال'), e: '💰', max: 5, cost: 2, mult: 1.9, start: 1, eff: l => L`تبدأ بـ ${fmt(startGold(l))} ذهب` },
+  { id: 't_offline', req: ['t_price', 3], b: 'trade', n: L('نوم هانئ'), e: '😴', max: 4, cost: 3, mult: 1.8, eff: l => L`التقدم أثناء الغياب حتى ${12 + 6 * l} ساعة` },
+  { id: 't_stars', req: ['t_offline', 2], b: 'trade', n: L('حكمة الأجيال'), e: '🌟', max: 10, cost: 4, mult: 1.7, eff: l => L`+${10 * l}% نجوم الإرث` },
+  { id: 'q_workers', req: ['q_hearts', 3], b: 'family', n: L('العمال يتذكرونك'), e: '🧑‍🌾', max: 3, cost: 3, mult: 2.5, start: 1,
     eff: l => ['—', L('تبدأ مع عامل الحصاد وعامل الزراعة'), L('الحصاد والزراعة + صندوق الشحن والرشاشات'), L('كل ما سبق + الراعي وتخصيص الحقول')][l] },
   { id: 'q_hearts', b: 'family', n: L('سمعة الجد'), e: '💞', max: 5, cost: 2, mult: 1.7, start: 1, eff: l => L`أهل القرية يبدؤون من ${2.5 + l} قلوب` },
-  { id: 'q_heirs', b: 'family', n: L('خزانة العائلة'), e: '🗝️', max: 2, cost: 5, mult: 3, eff: l => L`${3 + l} خيارات لقطع الإرث عند التقاعد` },
-  { id: 'q_bless', b: 'family', n: L('بركة الوادي'), e: '🌈', max: Infinity, cost: 10, mult: 1.35, eff: l => L`+${5 * l}% لكل شيء (بلا حد)` },
+  { id: 'q_heirs', req: ['q_hearts', 3], b: 'family', n: L('خزانة العائلة'), e: '🗝️', max: 2, cost: 5, mult: 3, eff: l => L`${3 + l} خيارات لقطع الإرث عند التقاعد` },
+  { id: 'q_bless', req: ['q_workers', 2], b: 'family', n: L('بركة الوادي'), e: '🌈', max: Infinity, cost: 10, mult: 1.35, eff: l => L`+${5 * l}% لكل شيء (بلا حد)` },
+  // Special skills: one per branch, unlocked after spending KS_NEED levels in that branch.
+  { id: 'f_seeds', ks: 1, b: 'farm', n: L('بذور خالدة'), e: '♾️', max: 1, cost: 25, mult: 1, eff: () => L('الزراعة ما تكلف بذور أبداً') },
+  { id: 'r_twin', ks: 1, b: 'ranch', n: L('بيت تهجين ثاني'), e: '🧬', max: 1, cost: 25, mult: 1, eff: () => L('تهجّن حيوانين بنفس الوقت') },
+  { id: 'm_tnt', ks: 1, b: 'mine', n: L('ديناميت'), e: '🧨', max: 1, cost: 25, mult: 1, eff: () => L('كل طابق تكمله في المنجم ينزلك طابقين') },
+  { id: 'w_ally', ks: 1, b: 'war', n: L('رفيق المعارك'), e: '🛡️', max: 1, cost: 25, mult: 1, eff: () => L('رفيق يقاتل معك بنصف قوتك، وينقذك من السقوط مرة كل 5 دقائق') },
+  { id: 't_deal', ks: 1, b: 'trade', n: L('تاجر الموسم'), e: '🧺', max: 1, cost: 25, mult: 1, eff: () => L('كل موسم يجيك تاجر يشتري محصول من محاصيل الموسم بـ ×3 السعر') },
+  { id: 'q_tools', ks: 1, b: 'family', n: L('إرث الأدوات'), e: '🧰', max: 1, cost: 25, mult: 1, start: 1, eff: () => L('أدواتك تنتقل للجيل الجديد بدرجة أقل بدل ما ترجع للصفر') },
 ];
 const HEIRLOOMS = [
   { id: 'sword', n: L('سيف الجد'), e: '🗡️', max: 6, eff: l => L`تبدأ كل جيل بسيف ${TIER[l]}` },
@@ -368,7 +375,18 @@ function take(id, n = 1) {
 }
 function addGold(n) { S.gold += n; if (n > 0) { S.stats.earned += n; S.gen.earned += n; } }
 function hearts(id) { return Math.floor(((S.npc[id] || {}).pts || 0) / 100) + (S.spouse === id ? 10 : 0); }
-function sellPrice(id) { return Math.round(ITEMS[id].price * (1 + 0.02 * hearts('mayor')) * goldMult()); }
+function sellPrice(id) { return Math.round(ITEMS[id].price * (1 + 0.02 * hearts('mayor')) * goldMult() * (id === dealCrop() ? 3 : 1)); }
+// Seasonal trader (special skill): one crop of the current season sells for x3.
+function dealCrop() {
+  if (!P('t_deal')) return null;
+  const k = S.year + '-' + S.season;
+  if (!S.deal || S.deal.k !== k) {
+    const fit = CROPS.filter(c => c.season === S.season || c.season === 4), open = fit.filter(cropUnlocked);
+    const c = pick(open.length ? open : fit.length ? fit : CROPS);
+    S.deal = { k, id: c.id };
+  }
+  return S.deal.id;
+}
 function dayAbsOf(x) { return (x.year - 1) * 4 * DAYS_PER_SEASON + x.season * DAYS_PER_SEASON + x.day; }
 function dayAbs() { return (S.year - 1) * 4 * DAYS_PER_SEASON + S.season * DAYS_PER_SEASON + S.day; }
 
@@ -396,11 +414,12 @@ function plotCrop(p) {
   const a = on('zoning') && p.a && CROP[p.a];
   return a && cropUnlocked(a) ? a : CROP[S.farm.seed];
 }
+function seedCost(c) { return P('f_seeds') ? 0 : c.seed; }
 function plant(i) {
   const p = S.farm.plots[i]; if (p.c || noFarm()) return false;
   const c = plotCrop(p);
-  if (!c || !cropUnlocked(c) || S.gold < c.seed) return false;
-  S.gold -= c.seed; p.c = c.id; p.p = 0; p.w = autoWet();
+  if (!c || !cropUnlocked(c) || S.gold < seedCost(c)) return false;
+  S.gold -= seedCost(c); p.c = c.id; p.p = 0; p.w = autoWet();
   return true;
 }
 function harvest(i) {
@@ -441,19 +460,22 @@ function breedCost(a, to) { return Math.round(a.cost * GRADE[to].costX * Math.po
 function breedChance(id, to) { return Math.min(0.9, GRADE[to].base + 0.01 * Math.max(0, S.skills.ranch.l - GRADE[to].lvl) + 0.05 * (S.barn.pity[id + '_' + to] || 0)); }
 function breedBlock(a, to) {
   const G = GRADE[to], g = grades(a.id);
-  if (S.barn.br) return L('بيت التهجين مشغول');
+  const busy = [S.barn.br, S.barn.br2].filter(Boolean);
+  if (busy.length >= (P('r_twin') ? 2 : 1)) return L('بيت التهجين مشغول');
+  if (busy.some(b => b.a === a.id)) return L('هذا الحيوان يتهجّن الحين');
   if (S.skills.ranch.l < G.lvl) return L`يتطلب رعي ${G.lvl}`;
   if (g[breedFrom(to)] < 2) return L`تحتاج ${to === 'p' ? L('اثنين عاديين') : L('اثنين ممتازين')}`;
   if ((S.barn.h[a.id] ?? 100) < 80) return L('السعادة أقل من 80%');
   return '';
 }
-function tickBreed(dt) {
-  const B = S.barn.br; if (!B) return;
+function tickBreed(dt) { tickBreedIn('br', dt); tickBreedIn('br2', dt); }
+function tickBreedIn(k, dt) {
+  const B = S.barn[k]; if (!B) return;
   if ((S.barn.h[B.a] ?? 100) < 50) return; // unhappy animals pause the breeding
   B.t += dt;
   if (B.t < B.need) return;
   const a = ANIMALS.find(x => x.id === B.a), G = GRADE[B.to], key = B.a + '_' + B.to;
-  S.barn.br = null;
+  S.barn[k] = null;
   if (grades(B.a)[breedFrom(B.to)] < 1) return log(L`🧬 فشل التهجين: ما بقي ${a.n} مناسب`, 'warn');
   if (Math.random() < B.chance) {
     const q = S.barn.q[B.a] || (S.barn.q[B.a] = { p: 0, g: 0 });
@@ -508,10 +530,11 @@ function blockDone() {
   if (d === S.mine.max && d < PICK_CAP[S.tools.pick]) {
     S.mine.blocks++;
     if (S.mine.blocks >= 5) {
-      S.mine.blocks = 0; S.mine.depth++; S.mine.max = S.mine.depth;
-      const no = ORES.find(x => x.depth === S.mine.depth);
+      const was = S.mine.depth;
+      S.mine.blocks = 0; S.mine.depth = Math.min(PICK_CAP[S.tools.pick], was + (P('m_tnt') ? 2 : 1)); S.mine.max = S.mine.depth;
+      const no = ORES.find(x => x.depth > was && x.depth <= S.mine.depth);
       if (no) log(L`⛏️ الطابق ${S.mine.depth}: ظهر معدن جديد ${no.e} ${no.n}!`, 'good');
-      else if (S.mine.depth % 10 === 0) log(L`⛏️ نزلت إلى الطابق ${S.mine.depth} في المنجم`);
+      else if (Math.floor(S.mine.depth / 10) > Math.floor(was / 10)) log(L`⛏️ نزلت إلى الطابق ${S.mine.depth} في المنجم`);
     }
   }
 }
@@ -583,6 +606,7 @@ function tickCombat(dt) {
   const D = S.dun, h = S.hero, mhp = heroMaxHp();
   if (h.hp > mhp) h.hp = mhp;
   if (D.retry > 0) D.retry -= dt;
+  if (D.allyT > 0) D.allyT -= dt;
   if (!D.active || D.resting) {
     h.hp = Math.min(mhp, h.hp + regenRate() * dt);
     if (D.active && D.resting && h.hp >= mhp) { D.resting = false; log(L('💪 تعافيت تماماً وعدت للزنزانة')); }
@@ -596,10 +620,12 @@ function tickCombat(dt) {
     D.ht -= 1;
     D.enemy.hp -= dmg(heroAtk(), D.enemy.def);
     if (D.enemy.hp <= 0) killEnemy();
+    if (P('w_ally')) { D.enemy.hp -= dmg(heroAtk() * 0.5, D.enemy.def); if (D.enemy.hp <= 0) killEnemy(); }
   }
   while (D.et >= 1.25) {
     D.et -= 1.25;
     h.hp -= dmg(D.enemy.atk, heroDef());
+    if (h.hp <= 0 && P('w_ally') && !(D.allyT > 0)) { h.hp = mhp * 0.3; D.allyT = 300; log(L('🛡️ رفيقك وقف قدامك وأنقذك من السقوط!'), 'good'); }
     if (h.hp <= 0) { heroDie(); return; }
   }
 }
@@ -660,6 +686,7 @@ function newDay() {
     S.day = 1; S.season++;
     if (S.season > 3) { S.season = 0; S.year++; }
     if (!inCh('winter')) log(L`${SEASONS[S.season].e} بدأ موسم ${SEASONS[S.season].n}!`, 'season');
+    const d = dealCrop(); if (d) log(L`🧺 تاجر الموسم وصل: يشتري ${CROP[d].e} ${CROP[d].n} بـ ×3 السعر`, 'gold');
   }
   if (inCh('winter')) S.season = 3;
   const r = Math.random();
@@ -736,13 +763,24 @@ function canRetire() { return S.gen.earned >= 1e6 || S.dun.max >= 30; }
 function starsBase() { return 3 * Math.sqrt(S.gen.earned / 1e6) + Math.max(0, S.dun.max - 10) / 3 + Math.max(0, S.mine.max - 20) / 10; }
 function starsGain() { return Math.floor(starsBase() * starMult()); }
 function perkCost(p, l) { return Math.ceil(p.cost * Math.pow(p.mult, l)); }
+const KS_NEED = 10;
+function branchLv(b) { return PERKS.filter(p => p.b === b && !p.ks).reduce((n, p) => n + P(p.id), 0); }
+// Why a perk can't be learned yet ('' = open). Perks already owned always stay open.
+function perkLock(p) {
+  if (P(p.id)) return '';
+  if (p.ks) { const n = branchLv(p.b); return n >= KS_NEED ? '' : L`اصرف ${KS_NEED} مستويات في هذا الفرع (${n}/${KS_NEED})`; }
+  if (p.req && P(p.req[0]) < p.req[1]) return L`يتطلب ${PERKS.find(x => x.id === p.req[0]).n} مستوى ${p.req[1]}`;
+  return '';
+}
+function perkTier(p) { let t = 0, q = p; while (q.req) { t++; q = PERKS.find(x => x.id === q.req[0]); } return t; }
+function perkSpent() { let n = 0; for (const p of PERKS) for (let l = 0; l < P(p.id); l++) n += perkCost(p, l); return n; }
 function heartStart() { return Math.min(1000, 250 + 100 * P('q_hearts') + 50 * H('ring')); }
 function childName() { const g = S.leg.gen + 1; return `${S.leg.family || S.name} ${ORD[g] || g}`; }
-function applyGenStart() {
+function applyGenStart(oldTools) {
   const LG = S.leg, nw = inCh('noworkers');
   S.gold = 50 + startGold(P('t_gold'));
   for (let i = 0; i < 2 * P('f_plots'); i++) S.farm.plots.push({ c: null, p: 0, w: false });
-  for (const t of ['hoe', 'can', 'pick', 'sword', 'armor', 'rod']) S.tools[t] = Math.min(6, H(t));
+  for (const t of ['hoe', 'can', 'pick', 'sword', 'armor', 'rod']) S.tools[t] = Math.min(6, Math.max(H(t), P('q_tools') && oldTools ? (oldTools[t] || 0) - 1 : 0));
   if (!noFarm()) {
     if (P('r_start')) { S.barn.n.chicken = 2 * P('r_start'); S.barn.h.chicken = 100; }
     if (H('cow')) { S.barn.n.cow = H('cow'); S.barn.h.cow = 100; }
@@ -800,11 +838,11 @@ function doRetire() {
   const heir = RS.heir ? HEIRLOOMS.find(x => x.id === RS.heir) : null;
   if (heir) LG.heir[heir.id] = H(heir.id) + 1;
   LG.gen++;
-  const keep = { leg: LG, stats: S.stats, locked: S.locked };
+  const keep = { leg: LG, stats: S.stats, locked: S.locked }, oldTools = { ...S.tools };
   const nm = (RS.name || '').trim().slice(0, 24) || childName();
   S = newState(); Object.assign(S, keep);
   S.name = nm; S.gender = RS.gender; S.started = true; S.gen.ch = RS.ch;
-  applyGenStart(); fillBoard();
+  applyGenStart(oldTools); fillBoard();
   S.last = Date.now(); logs = []; logDirty = true; zoneMode = false; lastSig = ''; tab = 'farm';
   log(L`🌱 بدأ الجيل ${LG.gen}: ${S.name} ${gv(L('يستلم'), L('تستلم'))} مزرعة العائلة`, 'season');
   if (S.gen.ch) { const c = CHALLENGES.find(x => x.id === S.gen.ch); log(L`🏆 تحدي هذا الجيل: ${c.e} ${c.n} — ${goalText(c)}`, 'season'); }
@@ -866,8 +904,9 @@ const A = {
     if (!a || !GRADE[to] || !BREEDABLE.includes(id) || breedBlock(a, to)) return;
     const c = breedCost(a, to); if (S.gold < c) return;
     S.gold -= c;
-    S.barn.br = { a: id, to, t: 0, need: GRADE[to].time, chance: breedChance(id, to) };
-    log(L`🧬 بدأ تهجين ${a.n} ${GRADE[to].n} — فرصة النجاح ${Math.round(S.barn.br.chance * 100)}%`);
+    const k = S.barn.br ? 'br2' : 'br';
+    S.barn[k] = { a: id, to, t: 0, need: GRADE[to].time, chance: breedChance(id, to) };
+    log(L`🧬 بدأ تهجين ${a.n} ${GRADE[to].n} — فرصة النجاح ${Math.round(S.barn[k].chance * 100)}%`);
   },
   pet: v => { S.barn.h[v] = Math.min(100, (S.barn.h[v] ?? 100) + 25); toast(L('❤️ الحيوانات سعيدة')); },
   dig: () => { dig(mineMult()); },
@@ -952,11 +991,21 @@ const A = {
   theme: () => { theme = theme === 'dark' ? 'light' : 'dark'; try { localStorage.setItem(THEME_KEY, theme); } catch (e) { /* */ } applyTheme(); },
   buyPerk: v => {
     const p = PERKS.find(x => x.id === v), l = P(v), c = perkCost(p, l);
-    if (l >= p.max || S.leg.stars < c) return;
+    if (!p || l >= p.max || S.leg.stars < c || perkLock(p)) return;
     S.leg.stars -= c; S.leg.perks[v] = l + 1;
     log(L`🌟 تعلّمت ${p.e} ${p.n} (مستوى ${l + 1})${p.start ? L(' — تطبق من الجيل القادم') : ''}`, 'good');
   },
   retire: () => openRetire(),
+  respec: () => {
+    if (S.gen.respec || !perkSpent()) return;
+    openModal(L`<h2>↺ إعادة توزيع النقاط</h2><p>ترجع لك كل النجوم اللي صرفتها (${fmt(perkSpent())}) وتقدر توزعها من جديد. مسموح مرة وحدة كل جيل.</p><p class="hint">المهارات المعلّمة بـ 🌱 اللي طبقت على هذا الجيل تبقى لين نهايته.</p>
+    <div class="row"><button class="btn gold" data-a="respecGo">↺ أعد التوزيع</button><button class="btn ghost" data-a="closeModal">إلغاء</button></div>`);
+  },
+  respecGo: () => {
+    if (S.gen.respec) return;
+    const n = perkSpent(); S.leg.stars += n; S.leg.perks = {}; S.gen.respec = 1;
+    closeModal(); log(L`↺ رجعت لك ${fmt(n)} نجمة إرث، وزّعها من جديد`, 'good');
+  },
   rsHeir: v => { RS.heir = v; showRetire(); },
   rsCh: v => { RS.ch = v === 'none' ? null : v; showRetire(); },
   retireGo: () => doRetire(),
@@ -1059,7 +1108,7 @@ function viewFarm() {
       const un = cropUnlocked(c);
       h += `<button class="seed ${S.farm.seed === c.id ? 'sel' : ''}" data-a="seed" data-v="${c.id}" ${un ? '' : 'disabled'}>
         <span class="big">${icon(c.id + '-seed',48)}${un ? '' : '<span class="seed-lock">🔒</span>'}</span><b>${c.n}</b>
-        ${un ? L`<small>بذرة ${fmt(c.seed)}💰 • بيع ${fmt(sellPrice(c.id))}💰</small><small>⏱ ${ftime(full ? c.grow : c.grow * 2)}</small>` : `<small>${c.season === 4 && S.leg.gen < 3 ? L('تنفتح في الجيل 3') : L`يتطلب زراعة ${c.lvl}`}</small>`}</button>`;
+        ${un ? L`<small>بذرة ${fmt(seedCost(c))}💰 • بيع ${fmt(sellPrice(c.id))}💰</small><small>⏱ ${ftime(full ? c.grow : c.grow * 2)}</small>` : `<small>${c.season === 4 && S.leg.gen < 3 ? L('تنفتح في الجيل 3') : L`يتطلب زراعة ${c.lvl}`}</small>`}</button>`;
     }
     h += '</div></div>';
   }
@@ -1133,15 +1182,16 @@ function viewBarn() {
   return h + '</div></div>' + breedPanel();
 }
 function breedPanel() {
-  const B = S.barn.br, lvlOk = S.skills.ranch.l >= GRADE.p.lvl;
+  const lvlOk = S.skills.ranch.l >= GRADE.p.lvl;
   let h = L`<div class="panel"><div class="ph"><h2>🧬 بيت التهجين</h2></div>
   <p class="hint">هجّن حيوانين من نفس الدرجة لتحصل على درجة أعلى. <b>الممتاز ${gradeBadge('p')}</b> ينتج ضعف الإنتاج. <b>الذهبي ${gradeBadge('g')}</b> ينتج ضعف الإنتاج من منتج ذهبي سعره ×5.
   التهجين مكلف وطويل وقد يفشل، لكن كل محاولة فاشلة ترفع فرصتك القادمة +5%. السعادة لازم تكون 80% عند البداية، وإذا نزلت تحت 50% يتوقف التهجين. الدرجات تبدأ من جديد مع كل جيل.</p>`;
   if (!lvlOk) return h + L`<p class="hint">🔒 يتطلب مستوى رعي ${GRADE.p.lvl}</p></div>`;
-  if (B) {
+  for (const k of ['br', 'br2']) {
+    const B = S.barn[k], sx = k === 'br' ? '' : '2'; if (!B) continue;
     const a = ANIMALS.find(x => x.id === B.a), G = GRADE[B.to];
     h += L`<div class="card breeding"><div class="top"><span class="big">${icon(a.id + '-' + B.to,48)}</span><div class="meta"><b>جاري تهجين ${a.n} ${G.n} ${gradeBadge(B.to)}</b><small>فرصة النجاح ${Math.round(B.chance * 100)}%</small></div></div>
-      <div class="kv"><span>المتبقي</span><span id="br_tt"></span></div><div class="bar"><i id="br_bar"></i></div></div>`;
+      <div class="kv"><span>المتبقي</span><span id="br_tt${sx}"></span></div><div class="bar"><i id="br_bar${sx}"></i></div></div>`;
   }
   h += '<div class="grid">';
   let any = false;
@@ -1160,8 +1210,9 @@ function breedPanel() {
   return h + '</div></div>';
 }
 function updBarn() {
-  const B = S.barn.br, bb = $('br_bar');
-  if (B && bb) { bb.style.width = Math.min(100, B.t / B.need * 100) + '%'; $('br_tt').textContent = (S.barn.h[B.a] ?? 100) < 50 ? L('⏸️ متوقف — الحيوانات حزينة') : ftime(B.need - B.t); }
+  for (const k of ['br', 'br2']) {
+    const B = S.barn[k], sx = k === 'br' ? '' : '2', bb = $('br_bar' + sx);
+    if (B && bb) { bb.style.width = Math.min(100, B.t / B.need * 100) + '%'; $('br_tt' + sx).textContent = (S.barn.h[B.a] ?? 100) < 50 ? L('⏸️ متوقف — الحيوانات حزينة') : ftime(B.need - B.t); } }
   for (const a of ANIMALS) {
     const t = $('an_t_' + a.id); if (!t) continue;
     const hp = S.barn.h[a.id] ?? 100;
@@ -1221,6 +1272,7 @@ function viewGuild() {
     <p class="hint">طوّر السيف والدرع عند الحداد. الطعام من مزرعتك يشفيك أثناء القتال (المقفل 🔒 لا يؤكل).</p>
   </div>
   <div class="panel"><div class="ph"><h2>🕳️ الزنزانة</h2><span class="stat">أنت في الطابق <b>${D.floor}</b> • المفتوح حتى <b>${D.max}</b></span></div>
+    ${P('w_ally') ? L('<p class="hint">🛡️ رفيق المعارك يقاتل معك.</p>') : ''}
     <div class="row">
       <button class="btn ${D.active ? 'red' : ''}" data-a="dunToggle">${D.active ? L('🏃 انسحاب') : L('🗡️ دخول الزنزانة')}</button>
       <button class="btn ghost sm" data-a="floor" data-v="-1" ${D.floor <= 1 ? 'disabled' : ''}>◀ طابق أسهل</button>
@@ -1340,7 +1392,7 @@ function viewMarket() {
   let total = 0; ids.forEach(id => { if (!S.locked[id]) total += sellPrice(id) * have(id); });
   let h = L`<div class="panel"><div class="ph"><h2>🛒 السوق والمخزن</h2>
     <button class="btn gold" data-a="shipAll">💰 بيع كل غير المقفل (<span id="mk_total">${fmt(total)}</span>💰)</button></div>
-    <p class="hint">🔒 = محمي من البيع الجماعي ومن صندوق الشحن ومن الأكل التلقائي. ${S.bld.bin ? L('📦 صندوق الشحن يبيع غير المقفل كل صباح.') : L('ابنِ صندوق الشحن في القرية ليبيع عنك تلقائياً.')}</p>${owned('bin') ? `<div class="row">${togBtn('bin')}</div>` : ''}`;
+    ${dealCrop() ? L`<p class="hint">🧺 تاجر الموسم يشتري ${CROP[dealCrop()].e} ${CROP[dealCrop()].n} بـ ×3 السعر هذا الموسم.</p>` : ''}<p class="hint">🔒 = محمي من البيع الجماعي ومن صندوق الشحن ومن الأكل التلقائي. ${S.bld.bin ? L('📦 صندوق الشحن يبيع غير المقفل كل صباح.') : L('ابنِ صندوق الشحن في القرية ليبيع عنك تلقائياً.')}</p>${owned('bin') ? `<div class="row">${togBtn('bin')}</div>` : ''}`;
   if (!ids.length) return h + L('<p class="hint">المخزن فارغ. ازرع واحصد أولاً!</p></div>');
   for (const cat of Object.keys(CAT_NAMES)) {
     const list = ids.filter(id => ITEMS[id].cat === cat); if (!list.length) continue;
@@ -1513,15 +1565,18 @@ function viewLegacy() {
   ${ch ? L`<div class="chbox"><b>${icon(ch)} تحدي هذا الجيل: ${ch.n}</b> — ${ch.rule}<div class="kv"><span>🎯 ${goalText(ch)}</span><span id="lg_chp"></span></div><div class="bar gp"><i id="lg_chb"></i></div></div>` : ''}
   </div>`;
   h += L`<div class="panel"><h2>🗺️ ما تفتحه الأجيال</h2><div class="road">${ROADMAP.map(([g, t]) => L`<div class="rstep ${LG.gen >= g ? 'done' : ''}"><b>${LG.gen >= g ? '✅' : '🔒'} الجيل ${g}</b><span>${t}</span></div>`).join('')}</div></div>`;
-  h += L`<div class="panel"><div class="ph"><h2>${icon("legacy-tree",32)} شجرة الإرث</h2><span class="stat starchip">${icon("legacy-crown",24)} ${fmt(LG.stars)}</span></div><p class="hint">المهارات المعلّمة بـ 🌱 تطبق من بداية الجيل القادم، والباقي يشتغل فوراً.</p>`;
+  h += L`<div class="panel"><div class="ph"><h2>${icon("legacy-tree",32)} شجرة الإرث</h2><span class="stat starchip">${icon("legacy-crown",24)} ${fmt(LG.stars)}</span></div><p class="hint">ابدأ من أول مهارة في كل فرع: كل 3 مستويات تفتح لك فرع جديد، ولما تصرف ${KS_NEED} مستويات في فرع تنفتح مهارته الخاصة ⭐. المهارات المعلّمة بـ 🌱 تطبق من بداية الجيل القادم، والباقي يشتغل فوراً.</p>
+  <div class="row"><button class="btn ghost sm" data-a="respec" ${S.gen.respec || !perkSpent() ? 'disabled' : ''}>↺ إعادة توزيع النقاط</button><small class="hint">${S.gen.respec ? L('استخدمتها في هذا الجيل') : L('مجانية، مرة وحدة كل جيل')}</small></div>`;
   for (const [b, bn] of Object.entries(BRANCHES)) {
-    h += `<h3>${bn}</h3><div class="grid">`;
-    for (const p of PERKS.filter(x => x.b === b)) {
-      const l = P(p.id), maxed = l >= p.max, c = perkCost(p, l);
-      h += `<div class="card perk ${l ? 'has' : ''}"><div class="top"><span class="big">${icon('perk-' + p.id,48)}</span><div class="meta"><b>${p.n}</b> ${p.max === Infinity ? `(${l})` : `(${l}/${p.max})`}${p.start ? ' 🌱' : ''}
-        <small>${l ? p.eff(l) : L('ما تعلمتها بعد')}</small>${!maxed ? L`<small>التالي: ${p.eff(l + 1)}</small>` : ''}</div></div>
-        <div class="row">${maxed ? L('<span class="stat">✨ مكتملة</span>') : `<button class="btn gold sm" data-a="buyPerk" data-v="${p.id}" ${LG.stars >= c ? '' : 'disabled'}>${icon("legacy-crown",24)} ${fmt(c)}</button>`}</div></div>`;
-    }
+    const list = PERKS.filter(x => x.b === b), lv = branchLv(b), ks = list.find(x => x.ks);
+    h += L`<div class="ptree"><div class="ptree-head"><h3>${bn}</h3><span class="stat">${lv} مستوى</span></div>`;
+    const tiers = [];
+    for (const p of list.filter(x => !x.ks)) (tiers[perkTier(p)] = tiers[perkTier(p)] || []).push(p);
+    tiers.push([ks]);
+    tiers.forEach((row, i) => {
+      if (i) h += '<div class="plink"></div>';
+      h += '<div class="ptier">' + row.map(perkCard).join('') + '</div>';
+    });
     h += '</div>';
   }
   h += '</div>';
@@ -1536,6 +1591,13 @@ function viewLegacy() {
   <div class="achs">${ACH.map(a => `<div class="ach ${LG.ach[a.id] ? 'got' : ''}"><span>${icon('ach-' + a.id,48)}</span><b>${a.n}</b><small>${a.d}</small></div>`).join('')}</div></div>`;
   if (LG.history.length) h += L`<div class="panel"><h2>👪 شجرة العائلة</h2>${LG.history.slice().reverse().map(x => L`<div class="kv"><span>الجيل ${x.gen}: <b>${esc(x.name)}</b></span><span>💰 ${fmt(x.earned)} • 🕳️ ${x.dun} • ${icon("legacy-crown",24)} +${x.stars}</span></div>`).join('')}</div>`;
   return h;
+}
+function perkCard(p) {
+  const LG = S.leg, l = P(p.id), maxed = l >= p.max, c = perkCost(p, l), why = perkLock(p);
+  const art = p.ks ? `<span class="ks-mark">${p.e}</span>` : icon('perk-' + p.id, 48);
+  return `<div class="card perk ${l ? 'has' : ''} ${why ? 'locked' : ''} ${p.ks ? 'ks' : ''}"><div class="top"><span class="big">${art}</span><div class="meta">${p.ks ? L('<small class="ks-tag">⭐ مهارة خاصة</small>') : ''}<b>${p.n}</b> ${p.ks ? '' : p.max === Infinity ? `(${l})` : `(${l}/${p.max})`}${p.start ? ' 🌱' : ''}
+    <small>${p.ks ? p.eff(1) : l ? p.eff(l) : L('ما تعلمتها بعد')}</small>${!maxed && !p.ks ? L`<small>التالي: ${p.eff(l + 1)}</small>` : ''}</div></div>
+    <div class="row">${maxed ? L('<span class="stat">✨ مكتملة</span>') : why ? `<span class="stat">🔒 ${why}</span>` : `<button class="btn gold sm" data-a="buyPerk" data-v="${p.id}" ${LG.stars >= c ? '' : 'disabled'}>${icon("legacy-crown",24)} ${fmt(c)}</button>`}</div></div>`;
 }
 function updLegacy() {
   if (!$('lg_e')) return;
@@ -1554,17 +1616,17 @@ function updLegacy() {
 
 const VIEWS = {
   farm: [viewFarm, updFarm, () => [S.off, S.leg.gen, zoneMode, S.bld.zoning, S.farm.plots.length, S.farm.seed, S.skills.farm.l, S.tools.can, S.season, S.weather, S.bld.harvester, S.bld.planter, S.bld.sprinkler, S.bld.greenhouse, hearts('mayor')]],
-  barn: [viewBarn, updBarn, () => [S.off, S.skills.ranch.l, barnCap(), S.bld.rancher, ...ANIMALS.map(a => S.barn.n[a.id] || 0), S.barn.q, S.barn.br && S.barn.br.a, S.barn.pity, BREEDABLE.map(id => ['p', 'g'].map(to => breedBlock(ANIMALS.find(x => x.id === id), to) + Math.round(breedChance(id, to) * 100)))]],
+  barn: [viewBarn, updBarn, () => [S.off, S.skills.ranch.l, barnCap(), S.bld.rancher, ...ANIMALS.map(a => S.barn.n[a.id] || 0), S.barn.q, S.barn.br && S.barn.br.a, S.barn.br2 && S.barn.br2.a, S.barn.pity, BREEDABLE.map(id => ['p', 'g'].map(to => breedBlock(ANIMALS.find(x => x.id === id), to) + Math.round(breedChance(id, to) * 100)))]],
   mine: [viewMine, updMine, () => [S.off, S.mine.miners, S.tools.pick]],
   guild: [viewGuild, updGuild, () => {
     const D = S.dun, g = S.guild;
     return [D.active, D.resting, D.auto, D.autoEat, D.floor, D.max, rankIdx(), questSlots(), g.active.map(q => q.id), g.board.map(q => q.id + (q.type === 'deliver' ? (have(q.item) >= q.qty) : Math.round(chanceOf(q) * 100)))];
   }],
   smith: [viewSmith, () => {}, () => [S.tools, S.leg.gen, hearts('smith'), TOOLS.map(t => { const l = S.tools[t.id] + 1; if (l > 6) return 0; const c = toolCost(l); return S.gold >= c.gold && have(c.ore) >= c.qty; })]],
-  market: [viewMarket, updMarket, () => [S.off, Object.keys(S.inv).sort(), Object.keys(S.locked).sort(), S.bld.bin, hearts('mayor')]],
+  market: [viewMarket, updMarket, () => [S.off, dealCrop(), Object.keys(S.inv).sort(), Object.keys(S.locked).sort(), S.bld.bin, hearts('mayor')]],
   village: [viewVillage, () => {}, () => [dayAbs(), S.bld, S.npc, S.off, S.spouse, S.gender, S.leg.gen, NPCS.map(n => [have(n.love) > 0, have(n.like) > 0])]],
   lake: [viewLake, updLake, () => [S.off, S.lake.fishers, S.skills.fish.l, S.tools.rod, S.leg.gen]],
-  legacy: [viewLegacy, updLegacy, () => { const LG = S.leg; return [LG.stars, LG.perks, LG.heir, LG.ch, Object.keys(LG.ach).length, LG.gen, S.gen.ch, S.gen.chDone, LG.history.length]; }],
+  legacy: [viewLegacy, updLegacy, () => { const LG = S.leg; return [LG.stars, LG.perks, S.gen.respec, LG.heir, LG.ch, Object.keys(LG.ach).length, LG.gen, S.gen.ch, S.gen.chDone, LG.history.length]; }],
   settings: [viewSettings, updSettings, () => [S.gender, S.spouse]],
 };
 

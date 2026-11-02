@@ -155,3 +155,16 @@ button.chip.fb-chip,[dir=ltr] button.chip.fb-chip{margin-left:0;margin-right:0}
 button.chip.au-chip,[dir=ltr] button.chip.au-chip{margin-left:0;margin-right:0;min-width:34px;justify-content:center}
 .au-row{align-items:center;gap:12px}
 .au-row input[type=range]{flex:1;max-width:220px;accent-color:var(--gold)}
+/* Legacy tree: each branch is a column of tiers, the special skill at the bottom */
+.ptree{display:flex;flex-direction:column;align-items:center;margin:22px 0 30px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--soft)}
+.ptree-head{display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:10px}
+.ptree-head h3{margin:0}
+.ptier{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;width:100%}
+.ptier .card{flex:1 1 240px;max-width:340px}
+.plink{width:3px;height:18px;margin:4px 0;border-radius:2px;background:var(--line)}
+.perk.locked .btn,.perk.locked .row .stat{font-size:12px}
+.perk.ks{border:2px solid var(--gold);background:linear-gradient(180deg,#e2bc6c1f,var(--paper2) 60%);box-shadow:0 0 0 3px #e2bc6c18}
+.perk.ks.locked{opacity:.75}
+.ks-mark{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;font-size:34px;line-height:1;background:radial-gradient(circle,#e2bc6c44,transparent 72%)}
+.ks-mark .px{width:40px!important;height:40px!important}
+.ks-tag{color:var(--gold)!important;font-weight:700}
