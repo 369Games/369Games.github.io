@@ -168,3 +168,19 @@ button.chip.au-chip,[dir=ltr] button.chip.au-chip{margin-left:0;margin-right:0;m
 .ks-mark{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;font-size:34px;line-height:1;background:radial-gradient(circle,#e2bc6c44,transparent 72%)}
 .ks-mark .px{width:40px!important;height:40px!important}
 .ks-tag{color:var(--gold)!important;font-weight:700}
+/* Golden harvest: shine on the plot and a glowing line in the event log */
+.golden-flash{position:fixed;pointer-events:none;border-radius:10px;display:grid;place-items:center;
+  background:radial-gradient(circle,#fff6c8ee 0,#ffd76aaa 35%,#e2a83a44 65%,transparent 75%);
+  box-shadow:0 0 0 3px #ffd76a,0 0 26px 8px #ffcf4d99;animation:golden-flash 1.6s ease-out forwards}
+.golden-flash span{font-size:34px;filter:drop-shadow(0 0 6px #fff3c4);animation:golden-spin 1.6s ease-out forwards}
+@keyframes golden-flash{0%{opacity:0;transform:scale(.7)}15%{opacity:1;transform:scale(1.12)}35%{transform:scale(1)}100%{opacity:0;transform:scale(1.05)}}
+@keyframes golden-spin{0%{transform:scale(.3) rotate(-40deg)}30%{transform:scale(1.4) rotate(10deg)}100%{transform:scale(1) rotate(0);opacity:0}}
+.particle-vfx.golden-spark{width:6px;height:6px;border-radius:50%;box-shadow:0 0 8px 2px #ffd76a}
+.float-vfx.golden-float{color:#ffe08a;font-size:24px;font-weight:800;text-shadow:0 0 10px #ffcf4d,0 2px 3px #3a2608}
+#log li.golden{position:relative;overflow:hidden;color:#7a5410;font-weight:700;padding:8px 10px;margin:4px 0;border:1px solid #e2bc6c;border-radius:9px;
+  background:linear-gradient(100deg,#fff3c4 0%,#ffd76a 45%,#fff3c4 100%)}
+#log li.golden small{color:#8a6a2a}
+#log li.golden:after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,#ffffffcc 50%,transparent 70%);transform:translateX(-120%);animation:golden-sheen 2.4s ease-in-out 3}
+@keyframes golden-sheen{0%{transform:translateX(-120%)}60%,100%{transform:translateX(120%)}}
+.start-note{color:var(--muted)}
+.start-note.now{color:var(--good)!important;font-weight:700}

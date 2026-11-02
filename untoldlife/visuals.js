@@ -135,3 +135,23 @@ function updateEnemyVisual(box, dungeon, hero, maxHp) {
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)draw(performance.now());});
   globalThis.redrawWeather=()=>draw(performance.now());requestAnimationFrame(loop);
 })();
+
+// Golden harvest: a gold flash over the plot, sparks and the gold amount rising.
+function goldenVisual(i, g) {
+  const el = document.getElementById('plot' + i), layer = document.getElementById('effects');
+  if (!el || !layer || document.hidden) return;
+  const r = el.getBoundingClientRect();
+  const f = document.createElement('div');
+  f.className = 'golden-flash';
+  f.style.cssText = `left:${Math.round(r.left)}px;top:${Math.round(r.top)}px;width:${Math.round(r.width)}px;height:${Math.round(r.height)}px`;
+  f.innerHTML = '<span>✨</span>';
+  layer.appendChild(f); setTimeout(() => f.remove(), 1700);
+  if (quietMotion.matches) return;
+  for (let k = 0; k < 14 && layer.childElementCount < 40; k++) {
+    const d = document.createElement('i'), a = k / 14 * Math.PI * 2, dist = 30 + (k % 3) * 16;
+    d.className = 'particle-vfx golden-spark';
+    d.style.cssText = `left:${Math.round(r.left + r.width / 2)}px;top:${Math.round(r.top + r.height / 2)}px;--dx:${Math.round(Math.cos(a) * dist)}px;--dy:${Math.round(Math.sin(a) * dist - 18)}px;--p:${k % 2 ? '#ffd76a' : '#fff3c4'}`;
+    layer.appendChild(d); setTimeout(() => d.remove(), 900);
+  }
+  floatVisual(el, '✨ +' + fmt(g) + ' ' + icon('coin', 24), 'golden-float');
+}

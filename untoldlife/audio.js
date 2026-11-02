@@ -336,6 +336,7 @@ if (typeof log === 'function') {
     baseLog.apply(this, arguments);
     if (typeof offline !== 'undefined' && offline) return;
     if (type === 'season') sfx('fanfare');
+    else if (type === 'golden') sfx('gift');
     else if (type === 'good') sfx(/⭐|⚔️/.test(msg) ? 'levelup' : 'good');
     else if (type === 'bad') sfx('bad');
     else if (/^⭐/.test(msg)) sfx('levelup');

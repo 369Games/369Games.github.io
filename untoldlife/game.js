@@ -427,7 +427,11 @@ function harvest(i) {
   const c = CROP[p.c];
   const n = Math.random() < 0.01 * S.skills.farm.l + 0.03 * H('seedbag') ? 2 : 1;
   give(c.id, n);
-  if (Math.random() < 0.01 * P('f_golden')) { const g = sellPrice(c.id) * 10; addGold(g); log(L`✨ محصول ذهبي! ${c.e} +${fmt(g)}💰`, 'gold'); } addXp('farm', c.price / 5 * n); S.stats.harvests += n;
+  if (Math.random() < 0.01 * P('f_golden')) {
+    const g = sellPrice(c.id) * 10; addGold(g);
+    log(L`✨ محصول ذهبي! ${c.e} ${c.n} يلمع ذهب: +${fmt(g)}💰 (×10 سعره)`, 'golden');
+    if (!offline && typeof goldenVisual === 'function') goldenVisual(i, g);
+  } addXp('farm', c.price / 5 * n); S.stats.harvests += n;
   p.c = null; p.p = 0; p.w = false;
   return true;
 }
@@ -773,6 +777,26 @@ function perkLock(p) {
   return '';
 }
 function perkTier(p) { let t = 0, q = p; while (q.req) { t++; q = PERKS.find(x => x.id === q.req[0]); } return t; }
+const START_GRACE = 2; // days
+function startNow() { return S.leg.gen > 1 && S.gen.days < START_GRACE; }
+function applyStartNow(id, l) {
+  const nw = inCh('noworkers');
+  if (id === 't_gold') S.gold += startGold(l) - startGold(l - 1);
+  else if (id === 'f_plots') for (let i = 0; i < 2; i++) S.farm.plots.push({ c: null, p: 0, w: false });
+  else if (id === 'r_start' && !noFarm()) { S.barn.n.chicken = (S.barn.n.chicken || 0) + 2; if (S.barn.h.chicken === undefined) S.barn.h.chicken = 100; }
+  else if (id === 'm_miners' && !nw) S.mine.miners += 2;
+  else if (id === 'q_workers' && !nw) {
+    const add = [[], ['harvester', 'planter'], ['bin', 'sprinkler'], ['rancher', 'zoning']][l] || [];
+    for (const k of add) S.bld[k] = S.bld[k] || 1;
+  }
+  else if (id === 'q_hearts') for (const n of NPCS) { const st = S.npc[n.id] || (S.npc[n.id] = { pts: 0, gd: 0 }); st.pts = Math.max(st.pts, heartStart()); }
+  else if (id === 'w_floor') {
+    let f = Math.max(1, Math.floor(S.leg.best.dun * 0.1 * l)); if (S.leg.gen < 4) f = Math.min(f, 100);
+    if (f > S.dun.max) S.dun.max = f;
+    if (f > S.dun.floor) S.dun.floor = f;
+  }
+  else if (id === 'q_tools' && S.gen.prevTools) for (const t in S.tools) S.tools[t] = Math.min(6, Math.max(S.tools[t], (S.gen.prevTools[t] || 0) - 1));
+}
 function perkSpent() { let n = 0; for (const p of PERKS) for (let l = 0; l < P(p.id); l++) n += perkCost(p, l); return n; }
 function heartStart() { return Math.min(1000, 250 + 100 * P('q_hearts') + 50 * H('ring')); }
 function childName() { const g = S.leg.gen + 1; return `${S.leg.family || S.name} ${ORD[g] || g}`; }
@@ -841,7 +865,7 @@ function doRetire() {
   const keep = { leg: LG, stats: S.stats, locked: S.locked }, oldTools = { ...S.tools };
   const nm = (RS.name || '').trim().slice(0, 24) || childName();
   S = newState(); Object.assign(S, keep);
-  S.name = nm; S.gender = RS.gender; S.started = true; S.gen.ch = RS.ch;
+  S.name = nm; S.gender = RS.gender; S.started = true; S.gen.ch = RS.ch; S.gen.prevTools = oldTools;
   applyGenStart(oldTools); fillBoard();
   S.last = Date.now(); logs = []; logDirty = true; zoneMode = false; lastSig = ''; tab = 'farm';
   log(L`🌱 بدأ الجيل ${LG.gen}: ${S.name} ${gv(L('يستلم'), L('تستلم'))} مزرعة العائلة`, 'season');
@@ -993,7 +1017,9 @@ const A = {
     const p = PERKS.find(x => x.id === v), l = P(v), c = perkCost(p, l);
     if (!p || l >= p.max || S.leg.stars < c || perkLock(p)) return;
     S.leg.stars -= c; S.leg.perks[v] = l + 1;
-    log(L`🌟 تعلّمت ${p.e} ${p.n} (مستوى ${l + 1})${p.start ? L(' — تطبق من الجيل القادم') : ''}`, 'good');
+    const now = p.start && startNow();
+    if (now) applyStartNow(v, l + 1);
+    log(L`🌟 تعلّمت ${p.e} ${p.n} (مستوى ${l + 1})${p.start ? now ? L(' — طبقت عليك الحين') : L(' — تطبق من الجيل القادم') : ''}`, 'good');
   },
   retire: () => openRetire(),
   respec: () => {
@@ -1565,7 +1591,7 @@ function viewLegacy() {
   ${ch ? L`<div class="chbox"><b>${icon(ch)} تحدي هذا الجيل: ${ch.n}</b> — ${ch.rule}<div class="kv"><span>🎯 ${goalText(ch)}</span><span id="lg_chp"></span></div><div class="bar gp"><i id="lg_chb"></i></div></div>` : ''}
   </div>`;
   h += L`<div class="panel"><h2>🗺️ ما تفتحه الأجيال</h2><div class="road">${ROADMAP.map(([g, t]) => L`<div class="rstep ${LG.gen >= g ? 'done' : ''}"><b>${LG.gen >= g ? '✅' : '🔒'} الجيل ${g}</b><span>${t}</span></div>`).join('')}</div></div>`;
-  h += L`<div class="panel"><div class="ph"><h2>${icon("legacy-tree",32)} شجرة الإرث</h2><span class="stat starchip">${icon("legacy-crown",24)} ${fmt(LG.stars)}</span></div><p class="hint">ابدأ من أول مهارة في كل فرع: كل 3 مستويات تفتح لك فرع جديد، ولما تصرف ${KS_NEED} مستويات في فرع تنفتح مهارته الخاصة ⭐. المهارات المعلّمة بـ 🌱 تطبق من بداية الجيل القادم، والباقي يشتغل فوراً.</p>
+  h += L`<div class="panel"><div class="ph"><h2>${icon("legacy-tree",32)} شجرة الإرث</h2><span class="stat starchip">${icon("legacy-crown",24)} ${fmt(LG.stars)}</span></div><p class="hint">ابدأ من أول مهارة في كل فرع: كل 3 مستويات تفتح لك فرع جديد، ولما تصرف ${KS_NEED} مستويات في فرع تنفتح مهارته الخاصة ⭐. المهارات المعلّمة بـ 🌱 تطبق من بداية الجيل القادم، إلا لو اشتريتها في أول يومين من الجيل فتطبق عليك فوراً. الباقي يشتغل فوراً دائماً.</p>
   <div class="row"><button class="btn ghost sm" data-a="respec" ${S.gen.respec || !perkSpent() ? 'disabled' : ''}>↺ إعادة توزيع النقاط</button><small class="hint">${S.gen.respec ? L('استخدمتها في هذا الجيل') : L('مجانية، مرة وحدة كل جيل')}</small></div>`;
   for (const [b, bn] of Object.entries(BRANCHES)) {
     const list = PERKS.filter(x => x.b === b), lv = branchLv(b), ks = list.find(x => x.ks);
@@ -1596,7 +1622,7 @@ function perkCard(p) {
   const LG = S.leg, l = P(p.id), maxed = l >= p.max, c = perkCost(p, l), why = perkLock(p);
   const art = p.ks ? `<span class="ks-mark">${p.e}</span>` : icon('perk-' + p.id, 48);
   return `<div class="card perk ${l ? 'has' : ''} ${why ? 'locked' : ''} ${p.ks ? 'ks' : ''}"><div class="top"><span class="big">${art}</span><div class="meta">${p.ks ? L('<small class="ks-tag">⭐ مهارة خاصة</small>') : ''}<b>${p.n}</b> ${p.ks ? '' : p.max === Infinity ? `(${l})` : `(${l}/${p.max})`}${p.start ? ' 🌱' : ''}
-    <small>${p.ks ? p.eff(1) : l ? p.eff(l) : L('ما تعلمتها بعد')}</small>${!maxed && !p.ks ? L`<small>التالي: ${p.eff(l + 1)}</small>` : ''}</div></div>
+    <small>${p.ks ? p.eff(1) : l ? p.eff(l) : L('ما تعلمتها بعد')}</small>${p.start && !maxed ? `<small class="start-note ${startNow() ? 'now' : ''}">${startNow() ? L('🌱 لو تشتريها الحين تطبق عليك فوراً') : L('🌱 تطبق من بداية الجيل القادم')}</small>` : ''}${!maxed && !p.ks ? L`<small>التالي: ${p.eff(l + 1)}</small>` : ''}</div></div>
     <div class="row">${maxed ? L('<span class="stat">✨ مكتملة</span>') : why ? `<span class="stat">🔒 ${why}</span>` : `<button class="btn gold sm" data-a="buyPerk" data-v="${p.id}" ${LG.stars >= c ? '' : 'disabled'}>${icon("legacy-crown",24)} ${fmt(c)}</button>`}</div></div>`;
 }
 function updLegacy() {
@@ -1626,7 +1652,7 @@ const VIEWS = {
   market: [viewMarket, updMarket, () => [S.off, dealCrop(), Object.keys(S.inv).sort(), Object.keys(S.locked).sort(), S.bld.bin, hearts('mayor')]],
   village: [viewVillage, () => {}, () => [dayAbs(), S.bld, S.npc, S.off, S.spouse, S.gender, S.leg.gen, NPCS.map(n => [have(n.love) > 0, have(n.like) > 0])]],
   lake: [viewLake, updLake, () => [S.off, S.lake.fishers, S.skills.fish.l, S.tools.rod, S.leg.gen]],
-  legacy: [viewLegacy, updLegacy, () => { const LG = S.leg; return [LG.stars, LG.perks, S.gen.respec, LG.heir, LG.ch, Object.keys(LG.ach).length, LG.gen, S.gen.ch, S.gen.chDone, LG.history.length]; }],
+  legacy: [viewLegacy, updLegacy, () => { const LG = S.leg; return [LG.stars, LG.perks, S.gen.respec, startNow(), LG.heir, LG.ch, Object.keys(LG.ach).length, LG.gen, S.gen.ch, S.gen.chDone, LG.history.length]; }],
   settings: [viewSettings, updSettings, () => [S.gender, S.spouse]],
 };
 
