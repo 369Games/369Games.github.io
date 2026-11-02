@@ -232,11 +232,13 @@ function auTick() {
 function auSwitch(id) {
   const ctx = AU.ctx, t = ctx.currentTime;
   AU.songId = id;
-  if (AU.file) { const old = AU.file; AU.file = null; let v = old.volume; const f = setInterval(() => { v = Math.max(0, v - 0.05); old.volume = v; if (!v) { old.pause(); clearInterval(f); } }, 80); }
+  if (AU.file) { const old = AU.file; AU.file = null; let v = old.volume; const f = setInterval(() => { if (AU.file === old) return clearInterval(f); v = Math.max(0, v - 0.05); old.volume = v; if (!v) { old.pause(); clearInterval(f); } }, 80); }
   const src = auFileFor(id);
   if (src) {
-    // A recorded track replaces the generated theme.
-    const a = new Audio(src); a.loop = true; a.volume = 0; AU.file = a; AU.song = null;
+    // A recorded track replaces the generated theme. Each track is kept, so it resumes where it stopped.
+    AU.files = AU.files || {};
+    const a = AU.files[id] || (AU.files[id] = new Audio(src));
+    a.loop = true; a.volume = 0; AU.file = a; AU.song = null;
     a.play().catch(() => {});
     let v = 0; const target = () => AU.set.muted ? 0 : AU.set.music * 0.6;
     const f = setInterval(() => { if (AU.file !== a) return clearInterval(f); v = Math.min(target(), v + 0.03); a.volume = v; if (v >= target()) clearInterval(f); }, 80);
