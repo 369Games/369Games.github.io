@@ -1756,7 +1756,8 @@ function sitePanel() {
   const C = siteConfig();
   const fb = `<button class="btn gold" data-a="feedback">${L('✍️ أرسل ملاحظاتك')}</button>`; // in-game form, feedback.js
   const home = C.home ? `<a class="btn ghost" href="${C.home}">${L('🏠 كل ألعابنا')}</a>` : '';
-  return `<h3>${L('💬 ملاحظاتك')}</h3><p class="hint">${L('هذي نسخة تجريبية. أي شيء عجبك أو ضايقك أو خرب، قل لنا.')}</p><div class="row">${fb}${home}</div>`;
+  const legal = C.home ? `<p class="hint"><a href="${C.home}privacy.html">${L('سياسة الخصوصية')}</a> · <a href="${C.home}about.html">${L('عن الاستديو')}</a></p>` : '';
+  return `<h3>${L('💬 ملاحظاتك')}</h3><p class="hint">${L('هذي نسخة تجريبية. أي شيء عجبك أو ضايقك أو خرب، قل لنا.')}</p><div class="row">${fb}${home}</div>${legal}`;
 }
 function initSiteLinks() {
   const fb = $('fbBtn');
