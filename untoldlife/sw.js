@@ -5,7 +5,7 @@
      Updated scripts and styles have a new ?v= in their address, so they are always fetched fresh.
    - Music (.mp3) and anything from other sites (Firebase, Google Forms, Cloudflare): passed through, never saved.
    Emergency switch: set KILL = true and publish; every player's worker removes itself and its saved files. */
-const KILL = false;
+const KILL = true;
 const CACHE = 'untoldlife-v1';
 
 self.addEventListener('install', e => { self.skipWaiting(); });

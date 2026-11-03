@@ -1,109 +1,44 @@
 <!doctype html>
-<html lang="ar" dir="rtl" data-theme="dark">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>UntoldLife</title>
-<meta name="theme-color" content="#2a2119">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="UntoldLife">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="assets/icons/favicon-64.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=64">
-<link rel="stylesheet" href="world-theme.css?v=64">
-<link rel="stylesheet" href="assets/art/sky/horizon-mask.css?v=64">
-<link rel="stylesheet" href="brand-theme.css?v=64">
-<link rel="stylesheet" href="art-pass2.css?v=64">
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "d00635426d214e93938126001ce4a104"}'></script>
+<meta name="robots" content="noindex">
+<title>369Games</title>
+<link rel="canonical" href="https://369games.net/">
+<style>
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#14100c;color:#f3e6c8;font:16px/1.7 system-ui,sans-serif;text-align:center}
+  a{color:#ffd76a}
+</style>
 </head>
 <body>
-<header id="top">
-  <div class="sky">
-    <div class="world-sky-decor" aria-hidden="true">
-    <div class="stars" id="stars"></div>
-    <div class="sun" id="sun"></div>
-    <div class="moon" id="moon"></div>
-    <div class="distant-hills" aria-hidden="true"></div>
-    <div class="hills" id="hills"></div>
-    <div class="world-clouds" id="skyClouds" aria-hidden="true"></div>
-    </div>
-    <div class="world-land world-land-day" aria-hidden="true"></div>
-    <div class="world-land world-land-night" aria-hidden="true"></div>
-    <canvas id="weatherCanvas" aria-hidden="true"></canvas>
-  </div>
-  <div class="brand">
-    <h1><img class="brand-wordmark" src="assets/art/brand/untoldlife-wordmark.webp" width="2172" height="724" alt="UntoldLife" fetchpriority="high" decoding="async"></h1>
-    <span class="brand-season-seal" aria-hidden="true"></span>
-    <span class="sub">حياة لم تُروَ بعد — <span id="hName"></span></span>
-  </div>
-  <div class="hud">
-    <div class="chip gold"><img class="px" src="assets/coin.svg" width="16" height="16" alt="ذهب"> <b id="hGold">0</b></div>
-    <div class="chip" id="hDate"></div>
-    <div class="chip" id="hWeather"></div>
-    <div class="chip" id="hClock"></div>
-    <div class="chip" id="hPhase"></div>
-    <div class="chip" id="hGen"></div>
-    <div class="chip hidden" id="hCh"></div>
-    <button class="chip cloud-chip hidden" id="cloudChip" data-a="cloudChip"></button>
-    <button class="chip notes-chip" id="notesBtn" data-a="notes"></button>
-    <button class="chip" id="themeBtn" data-a="theme"></button>
-    <button class="chip lang-chip" id="langBtn" data-a="lang"></button>
-    <button class="chip fb-chip hidden" id="fbBtn" data-a="feedback"></button>
-    <button class="chip au-chip" id="muteBtn" data-a="muteToggle" aria-label="Sound"></button>
-  </div>
-</header>
-
-<nav id="tabs" aria-label="أماكن القرية"></nav>
-
-<div id="wrap">
-  <main id="view"></main>
-  <aside id="side">
-    <div class="stabs"><button class="stab on" data-a="side" data-v="log"><svg class="ui-icon" data-icon-id="scroll" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 3h14v18H5zM8 7h8m-8 5h8m-8 5h5"/></svg> سجل الأحداث</button><button class="stab" data-a="side" data-v="buffs"><svg class="ui-icon" data-icon-id="sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z"/></svg> البفات الحالية</button></div>
-    <div id="sideLog"><ul id="log"></ul></div>
-    <div id="buffs" class="hidden"></div>
-  </aside>
-</div>
-
-<div id="effects" aria-hidden="true"></div>
-<div id="toast" role="status" aria-live="polite"></div>
-<div id="modal" class="hidden" role="dialog" aria-modal="true" aria-label="رسالة من الوادي"><div class="mbox" id="mbox"></div></div>
-
+<main>
+  <p>🚚 انتقلنا إلى <b>369games.net</b> — We moved to <b>369games.net</b></p>
+  <p><a id="go" href="https://369games.net/">https://369games.net/</a></p>
+</main>
 <script>
-// Load only the chosen language's translations (Arabic needs none). Switching language reloads the page.
-(function () { var l = ''; try { l = localStorage.getItem('untoldlife_lang') || ''; } catch (e) {}
-  if (l === 'es' || l === 'pt') l = 'en'; // retired languages
-  if (/^(en|ru|zh)$/.test(l)) document.write("<script src='lang-" + l + ".js?v=64'><\/script>"); })();
-</script>
-<script src="i18n.js?v=64"></script>
-<script src="assets/sprites.js"></script>
-<script src="assets/art.js?v=64"></script>
-<script src="assets/cutouts.js?v=64"></script>
-<script src="assets/season-portraits.js?v=64"></script>
-<script src="assets/legacy-art.js?v=64"></script>
-<script src="assets/pass2-art.js?v=64"></script>
-<script src="assets/image-metadata.js?v=64"></script>
-<script src="asset-labels.js?v=64"></script>
-<script src="ui-v2.js?v=64"></script>
-<script src="visuals.js?v=64"></script>
-<script src="world-scene.js?v=64"></script>
-<script src="site-config.js?v=64"></script>
-<script src="game.js?v=64"></script>
-<script src="tutorial.js?v=64"></script>
-<script src="tips.js?v=64"></script>
-<script src="feedback.js?v=64"></script>
-<script src="stats.js?v=64"></script>
-<script src="move.js?v=64"></script>
-<script src="cloud.js?v=64"></script>
-<script src="patchnotes.js?v=64"></script>
-<script src="assets/music/tracks.js?v=64"></script>
-<script src="audio.js?v=64"></script>
-<script>
-// Install as an app and open offline (sw.js). Only on the published site, so local edits are never served stale.
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.pathname.indexOf('/dist/') >= 0))
-  addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+/* The old address (369games.github.io). The game no longer runs here: every page sends the player to the
+   same page on the new domain. A save kept on this address travels with them, packed into the link's #hash
+   (the hash never reaches any server), and the game on the new domain loads it (move.js). */
+(function () {
+  var NEW = 'https://369games.net';
+  var KEYS = ['untoldlife_save_v1', 'untoldlife_lang', 'untoldlife_audio', 'untoldlife_backup_at'];
+  var path = location.pathname.replace(/index\.html$/, '');
+  var target = NEW + path + location.search;
+  // The old game installed a service worker here; remove it so it can't serve the old game again.
+  try { if (navigator.serviceWorker) navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); }); } catch (e) {}
+  var data = {}, has = false;
+  for (var i = 0; i < KEYS.length; i++) { try { var v = localStorage.getItem(KEYS[i]); if (v !== null) { data[KEYS[i]] = v; if (i === 0) has = true; } } catch (e) {} }
+  function b64url(bytes) { var s = ''; for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function go(url) { document.getElementById('go').href = url; location.replace(url); }
+  if (!has) return go(target);
+  var game = NEW + '/untoldlife/';
+  var raw = new TextEncoder().encode(JSON.stringify(data));
+  if (typeof CompressionStream === 'undefined') return go(game + '#move=r' + b64url(raw));
+  new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer()
+    .then(function (buf) { go(game + '#move=z' + b64url(new Uint8Array(buf))); })
+    .catch(function () { go(game + '#move=r' + b64url(raw)); });
+})();
 </script>
 </body>
 </html>

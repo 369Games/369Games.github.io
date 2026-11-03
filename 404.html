@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>369Games</title>
+<link rel="canonical" href="https://369games.net/">
+<style>
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#14100c;color:#f3e6c8;font:16px/1.7 system-ui,sans-serif;text-align:center}
+  a{color:#ffd76a}
+</style>
+</head>
+<body>
+<main>
+  <p>🚚 انتقلنا إلى <b>369games.net</b> — We moved to <b>369games.net</b></p>
+  <p><a id="go" href="https://369games.net/">https://369games.net/</a></p>
+</main>
+<script>
+/* The old address (369games.github.io). The game no longer runs here: every page sends the player to the
+   same page on the new domain. A save kept on this address travels with them, packed into the link's #hash
+   (the hash never reaches any server), and the game on the new domain loads it (move.js). */
+(function () {
+  var NEW = 'https://369games.net';
+  var KEYS = ['untoldlife_save_v1', 'untoldlife_lang', 'untoldlife_audio', 'untoldlife_backup_at'];
+  var path = location.pathname.replace(/index\.html$/, '');
+  var target = NEW + path + location.search;
+  // The old game installed a service worker here; remove it so it can't serve the old game again.
+  try { if (navigator.serviceWorker) navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); }); } catch (e) {}
+  var data = {}, has = false;
+  for (var i = 0; i < KEYS.length; i++) { try { var v = localStorage.getItem(KEYS[i]); if (v !== null) { data[KEYS[i]] = v; if (i === 0) has = true; } } catch (e) {} }
+  function b64url(bytes) { var s = ''; for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function go(url) { document.getElementById('go').href = url; location.replace(url); }
+  if (!has) return go(target);
+  var game = NEW + '/untoldlife/';
+  var raw = new TextEncoder().encode(JSON.stringify(data));
+  if (typeof CompressionStream === 'undefined') return go(game + '#move=r' + b64url(raw));
+  new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer()
+    .then(function (buf) { go(game + '#move=z' + b64url(new Uint8Array(buf))); })
+    .catch(function () { go(game + '#move=r' + b64url(raw)); });
+})();
+</script>
+</body>
+</html>
